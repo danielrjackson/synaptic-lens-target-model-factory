@@ -1,0 +1,23 @@
+[project]
+name = "synaptic-lens-target-model-factory"
+version = "0.1.0"
+description = "Reproducible arithmetic and image-classifier target recipes for Synaptic Lens"
+requires-python = ">=3.13"
+readme = "README.md"
+license = "LicenseRef-AI-Pubs-Research-use-RAIL-S-0.1"
+license-files = ["LICENSE.md", "LICENSE-MODEL.md", "NOTICE"]
+authors = [{name = "Daniel Jackson"}]
+dependencies = ["torch>=2.14", "numpy>=2", "Pillow>=13"]
+[project.optional-dependencies]
+test = ["pytest>=8"]
+[build-system]
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

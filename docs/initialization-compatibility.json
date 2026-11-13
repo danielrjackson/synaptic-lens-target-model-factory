@@ -1,0 +1,97 @@
+{
+  "status": "Archived byte-exact initialization not established on Windows; version-only explanation ruled out",
+  "tested_torch": "2.14.0+cu132",
+  "recipe_source_torch_requirement": ">=2.15.0",
+  "recipe_source_locked_torch": "2.15.0+cu134",
+  "comparison": "Original and curated model states are bit-identical in this tested runtime; this does not establish the reason for mismatch to archived goldens.",
+  "cases": [
+    {
+      "seed": 71,
+      "archived_expected_sha256": "bda11c68db6e638df2048c46148287d40acc44c4ff946c4baddf9e3dd45a8b79",
+      "observed_sha256": "3c079f9bdf51b90339f27a65b08bd072a58ecdf726e7dd1a7be4b08f9e56b900"
+    },
+    {
+      "seed": 171,
+      "archived_expected_sha256": "3035b3e19c05a00cd238ce695af9de38d0070641b9be20dfc2823e687bdc0e3d",
+      "observed_sha256": "02de820a3806f2c48c13b1a81e2c077d3cdbe5a5e346a32459174fe418f26f98"
+    },
+    {
+      "seed": 271,
+      "archived_expected_sha256": "744e4022e44f8cec78f9805d235b5c6259cacb4750ace5acc18e3342606e599e",
+      "observed_sha256": "2fc338e3788153cea80c56533865a52f4f4b501a07b824e4c3fabcec1190210b"
+    }
+  ],
+  "original_tests_and_evidence": "preserved unchanged in the research source; not claimed reproduced by this distribution",
+  "tested_profiles": [
+    {
+      "torch": "2.14.0+cu132",
+      "platform": "win32",
+      "default_dtype": "torch.float32",
+      "cases": [
+        {
+          "seed": 71,
+          "expected_sha256": "bda11c68db6e638df2048c46148287d40acc44c4ff946c4baddf9e3dd45a8b79",
+          "actual_sha256": "3c079f9bdf51b90339f27a65b08bd072a58ecdf726e7dd1a7be4b08f9e56b900",
+          "matches": false
+        },
+        {
+          "seed": 171,
+          "expected_sha256": "3035b3e19c05a00cd238ce695af9de38d0070641b9be20dfc2823e687bdc0e3d",
+          "actual_sha256": "02de820a3806f2c48c13b1a81e2c077d3cdbe5a5e346a32459174fe418f26f98",
+          "matches": false
+        },
+        {
+          "seed": 271,
+          "expected_sha256": "744e4022e44f8cec78f9805d235b5c6259cacb4750ace5acc18e3342606e599e",
+          "actual_sha256": "2fc338e3788153cea80c56533865a52f4f4b501a07b824e4c3fabcec1190210b",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "torch": "2.15.0+cpu",
+      "platform": "win32",
+      "default_dtype": "torch.float32",
+      "cases": [
+        {
+          "seed": 71,
+          "expected_sha256": "bda11c68db6e638df2048c46148287d40acc44c4ff946c4baddf9e3dd45a8b79",
+          "actual_sha256": "3c079f9bdf51b90339f27a65b08bd072a58ecdf726e7dd1a7be4b08f9e56b900",
+          "matches": false
+        },
+        {
+          "seed": 171,
+          "expected_sha256": "3035b3e19c05a00cd238ce695af9de38d0070641b9be20dfc2823e687bdc0e3d",
+          "actual_sha256": "02de820a3806f2c48c13b1a81e2c077d3cdbe5a5e346a32459174fe418f26f98",
+          "matches": false
+        },
+        {
+          "seed": 271,
+          "expected_sha256": "744e4022e44f8cec78f9805d235b5c6259cacb4750ace5acc18e3342606e599e",
+          "actual_sha256": "2fc338e3788153cea80c56533865a52f4f4b501a07b824e4c3fabcec1190210b",
+          "matches": false
+        }
+      ]
+    }
+  ],
+  "cross_profile_result": "All three complete current states and every tensor hash agree between Windows PyTorch2.14.0+cu132 CPU and2.15.0+cpu. Both differ from archived goldens; requiring2.15 alone does not resolve the mismatch.",
+  "representative_public_birth": {
+    "repository": "danielrjackson/synaptic-lens-targets-mnist",
+    "revision": "f422682c970bdf64c8b30d24c2cf7bac8ce3ef6c",
+    "file": "mnist-d32-l2-root-1007/states/state-update-00000.pt",
+    "sha256": "e01f79b6b7c9b3018421ddbc2bf6ea9b7a31a936665e5ad10ec785d5c8e2513a",
+    "root_seed": 1007,
+    "config_derived_initialization_seed": 10071,
+    "changed_uniform_tensor_count": 10,
+    "changed_uniform_coordinates": 6444,
+    "uniform_result": "Every changed uniform tensor exactly matches simulated fused FP32-coefficient affine rounding; current Windows values match separate multiply/add rounding. This identifies numerical rounding semantics, not a proven compiler configuration.",
+    "position_embedding": {
+      "different_coordinates": 19,
+      "elements": 1600,
+      "max_abs_difference": 3.725290298461914e-09,
+      "max_ulp_distance": 2
+    },
+    "normal_rounding_cause": "Residual normal-initializer kernel rounding not fully identified; do not infer complete golden reconstruction from the uniform result."
+  },
+  "scope_limit": "One public birth-state fixture and three digest-only golden cases. No full training, Linux execution or historical outcome reproduction. Use released states when exact archived weights are required."
+}
