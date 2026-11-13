@@ -1,0 +1,25 @@
+{
+  "status": "archived bitwise initialization NOT verified",
+  "tested_torch": "2.14.0+cu132",
+  "recipe_source_torch_requirement": ">=2.15.0",
+  "recipe_source_locked_torch": "2.15.0+cu134",
+  "comparison": "Original and curated model states are bit-identical in this tested runtime; this does not establish the reason for mismatch to archived goldens.",
+  "cases": [
+    {
+      "seed": 71,
+      "archived_expected_sha256": "bda11c68db6e638df2048c46148287d40acc44c4ff946c4baddf9e3dd45a8b79",
+      "observed_sha256": "3c079f9bdf51b90339f27a65b08bd072a58ecdf726e7dd1a7be4b08f9e56b900"
+    },
+    {
+      "seed": 171,
+      "archived_expected_sha256": "3035b3e19c05a00cd238ce695af9de38d0070641b9be20dfc2823e687bdc0e3d",
+      "observed_sha256": "02de820a3806f2c48c13b1a81e2c077d3cdbe5a5e346a32459174fe418f26f98"
+    },
+    {
+      "seed": 271,
+      "archived_expected_sha256": "744e4022e44f8cec78f9805d235b5c6259cacb4750ace5acc18e3342606e599e",
+      "observed_sha256": "2fc338e3788153cea80c56533865a52f4f4b501a07b824e4c3fabcec1190210b"
+    }
+  ],
+  "original_tests_and_evidence": "preserved unchanged in the research source; not claimed reproduced by this distribution"
+}
