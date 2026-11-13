@@ -7,3 +7,6 @@ build/
 dist/
 .env
 .env.*
+
+.venv-locked/
+.venv-installer/

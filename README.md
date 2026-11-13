@@ -4,6 +4,11 @@ Author-developed recipes for target networks studied by [Synaptic Lens](https://
 Targets solve arithmetic or image tasks; Lens observers predict properties of
 those targets and live in the companion repository. These are separate models.
 
+## Reproducible Windows installation
+
+Use the [hash-locked CPU installation](docs/DEPENDENCIES.md) for reproducible
+runtime, tests and wheel builds. The exploratory installation below is not locked.
+
 ## Install and try a bounded CPU example
 
 Use Python 3.13 or later. From a checkout, create a virtual environment and

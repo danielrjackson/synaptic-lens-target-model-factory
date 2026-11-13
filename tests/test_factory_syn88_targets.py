@@ -1,12 +1,14 @@
 import numpy as np
 import pytest
 import torch
-from synaptic_lens.targets import addition_suite, restore_adder
+from torch.nn.utils import vector_to_parameters
+
 from synaptic_lens_target_model_factory.arithmetic.syn88 import (
     AGES,
     generate_root,
     split_roots,
 )
+from synaptic_lens_target_model_factory.arithmetic.targets import Adder, addition_suite
 
 
 def test_partitions_are_root_disjoint():
@@ -25,7 +27,8 @@ def test_generated_root_and_native_labels(tmp_path):
     _, inputs, answers = addition_suite()
     for rule in range(2):
         for age in range(8):
-            model = restore_adder(torch.from_numpy(result["weights"][rule, age]), 32)
+            model = Adder(hidden=32)
+            vector_to_parameters(torch.from_numpy(result["weights"][rule, age]).clone(), model.parameters())
             with torch.no_grad():
                 labels = model(inputs).argmax(-1).eq(answers).numpy()
             np.testing.assert_array_equal(labels, result["addition_correct"][rule, age])
@@ -45,6 +48,7 @@ def test_invalid_root():
 
 def test_lineage_records_pairing_ages_and_explicit_source_revision():
     import numpy as np
+
     from synaptic_lens_target_model_factory.arithmetic.syn88 import AGES, root_lineage
 
     payload = {
