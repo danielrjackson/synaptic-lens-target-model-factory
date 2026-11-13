@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite this repository and the revision used."
+title: "Synaptic Lens Target Model Factory"
+type: software
+version: 0.1.0
+authors:
+  - family-names: Jackson
+    given-names: Daniel
+repository-code: "https://github.com/danielrjackson/synaptic-lens-target-model-factory"
+license: "LicenseRef-AI-Pubs-Research-use-RAIL-S-0.1"

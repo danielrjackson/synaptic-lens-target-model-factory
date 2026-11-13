@@ -1,0 +1,4 @@
+Synaptic Lens Target Model Factory
+Copyright Daniel Jackson.
+
+Curated author-developed arithmetic and vision target recipes. Source derives from Synaptic Lens and its target-model research. Third-party dependencies and MNIST retain their own rights. No MNIST images or external pretrained weights are distributed. AI-assisted engineering does not imply independent scientific validation.
