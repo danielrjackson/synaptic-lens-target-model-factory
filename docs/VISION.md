@@ -55,8 +55,11 @@ width. d32-L2/d64-L2/d64-L4 are distinct configurations. Model tensor layouts
 must match the corresponding coordinate schema. Root-explicit initialization and
 config-derived run-seed initialization are separately named APIs.
 
-See `initialization-compatibility.json`: archived initializer digests are not
-verified under the tested runtime. Keep source, library version, seed, task,
+See `initialization-compatibility.json`: archived initializer digests differ under both tested Windows CPU runtimes.
+The same raw unit draws reproduce changed uniform tensors using fused instead
+of separate FP32 affine rounding. Nineteen positional-token values in the tested
+birth reference differ by at most two ULPs; that residual kernel cause remains
+unresolved. A library version requirement alone does not establish byte parity. Keep source, library version, seed, task,
 label mapping, data hashes, split indices, optimizer settings and actual states
 in lineage manifests. Loading an existing state and recreating its initialization
 are different checks.
@@ -65,3 +68,9 @@ The design uses patch-transformer mechanisms described by [Dosovitskiy et al.](h
 and [Vaswani et al.](https://arxiv.org/abs/1706.03762), with [AdamW](https://arxiv.org/abs/1711.05101).
 These references explain mechanisms used; this is not a reproduction of those
 papers' reported results or pretrained models.
+
+`vision.compatibility.compare_initializer(path, sha256, initialization_seed=...)`
+performs a bounded restricted CPU load and reports exact state hashes, changed
+coordinates, maximum absolute differences and ULP distances. It rejects schema
+or file-identity mismatches. This is a diagnostic, never a weight-correction or
+historical-training-reproduction routine. Preserve archived goldens unchanged.

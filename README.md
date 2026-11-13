@@ -71,11 +71,14 @@ LeCun, Corinna Cortes and Christopher J. C. Burges; obtain it upstream under its
 own terms. [Upstream torchvision resource metadata](https://raw.githubusercontent.com/pytorch/vision/main/torchvision/datasets/mnist.py)
 identifies download checksums; it does not grant dataset redistribution rights.
 
-Archived bitwise initialization is **not verified** in the tested PyTorch 2.14
-runtime. The source recipe requires PyTorch 2.15. The three archived/observed
-hashes and exact limitation remain in [compatibility status](docs/initialization-compatibility.json).
-Seeded current-runtime repeatability and strict checkpoint loading are tested;
-those checks must not be presented as historical reproduction.
+Archived byte-exact initialization is **not established** on Windows. The same
+three states are generated under both tested PyTorch 2.14 and 2.15 CPU profiles,
+and both differ from the archived digests. A small published birth-state fixture
+isolates uniform-affine FP32 rounding differences and a two-ULP positional-token
+residual. See [compatibility evidence](docs/initialization-compatibility.json).
+`vision.compatibility.compare_initializer` hash-binds a supplied reference and
+reports byte-level and ULP differences without changing either state. Current
+seeded repeatability and strict checkpoint loading are separate tested contracts.
 
 ## Artifacts, evidence and citation
 
