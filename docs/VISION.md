@@ -66,11 +66,9 @@ are different checks.
 
 The design uses patch-transformer mechanisms described by [Dosovitskiy et al.](https://arxiv.org/abs/2010.11929)
 and [Vaswani et al.](https://arxiv.org/abs/1706.03762), with [AdamW](https://arxiv.org/abs/1711.05101).
-These references explain mechanisms used; this is not a reproduction of those
-papers' reported results or pretrained models.
+These references explain the architecture and optimization mechanisms used.
 
 `vision.compatibility.compare_initializer(path, sha256, initialization_seed=...)`
 performs a bounded restricted CPU load and reports exact state hashes, changed
 coordinates, maximum absolute differences and ULP distances. It rejects schema
-or file-identity mismatches. This is a diagnostic, never a weight-correction or
-historical-training-reproduction routine. Preserve archived goldens unchanged.
+or file-identity mismatches. This diagnostic reports differences while leaving both states unchanged. Preserve archived goldens unchanged.

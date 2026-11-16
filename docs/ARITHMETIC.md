@@ -25,8 +25,7 @@ twelve maps do not mean twelve published SYN88 trajectories per root.
 
 The optimization recipe uses Adam at learning rate 0.02 for 100 full-batch target
 updates. Addition correctness is always measured against ordinary sums, including
-for alternate-trained targets. Pairing is by independent initialization root,
-not by a randomly selected checkpoint. Use the pinned HF release for historical
+for alternate-trained targets. Pairing uses independent initialization roots. Use the pinned HF release for historical
 evaluation; generated numeric states are new computational outputs.
 
 The generator writes `generation-manifest.json` with root/seed, paired-birth
