@@ -42,10 +42,10 @@ raster checks. Tiny seeded examples are not acceptance evidence for an entire
 later historical collection. Semantic-repair collection acceptance, SYN93–95
 and later provenance remain outside this distribution's claims.
 
-Run `python examples/train_vision.py --family FAMILY` for each of sprites,
+Run `python examples/train_vision.py --family FAMILY --device cuda` for each of sprites,
 shapes, textures, count, location and arrows. Each generates ten synthetic
-examples, performs one target update, and verifies a hash-bound restricted CPU
-checkpoint roundtrip. No images go to a Lens observer.
+examples, performs one target update, and verifies a hash-bound restricted
+checkpoint roundtrip. The example trains the image classifier directly.
 
 ## Architecture and reproducibility limits
 

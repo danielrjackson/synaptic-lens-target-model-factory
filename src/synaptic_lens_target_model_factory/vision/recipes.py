@@ -30,13 +30,14 @@ def contrarian_labels(labels, mapping):
     return mapping[labels].astype(np.uint8)
 
 
-def train_fixture(images, labels, *, seed=7, updates=1):
-    """One-root CPU smoke recipe, not the historical full collection schedule."""
+def train_fixture(images, labels, *, seed=7, updates=1, device="cpu"):
+    """Train a small d32-L2 target for a bounded installation check."""
     if type(updates) is not int or not 1 <= updates <= 10:
         raise ValueError("Fixture recipe permits 1 through 10 updates")
     if not 1 <= len(images) <= 256:
         raise ValueError("Fixture recipe requires 1 through 256 images")
-    x = normalize_uint8_images(images)
+    device = torch.device(device)
+    x = normalize_uint8_images(images).to(device)
     y = torch.as_tensor(np.asarray(labels).copy())
     if (
         y.shape != (len(x),)
@@ -47,16 +48,17 @@ def train_fixture(images, labels, *, seed=7, updates=1):
     ):
         raise ValueError("Expected one native class index per image")
     with torch.random.fork_rng(devices=[]):
-        model = build_d32_l2(seed)
+        model = build_d32_l2(seed).to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
         initial = state_dict_sha256(model.state_dict())
         for _ in range(updates):
             optimizer.zero_grad(set_to_none=True)
-            loss = F.cross_entropy(model(x), y.long())
+            loss = F.cross_entropy(model(x), y.long().to(device))
             loss.backward()
             optimizer.step()
     return model.eval(), {
         "seed": seed,
+        "device": str(device),
         "updates": updates,
         "initial_state_sha256": initial,
         "final_state_sha256": state_dict_sha256(model.state_dict()),
