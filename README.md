@@ -34,6 +34,12 @@ See the [official PyTorch installation guide](https://pytorch.org/get-started/lo
 for CPU-specific wheels. Examples use CPU only and fresh temporary directories.
 They do not download MNIST or train a historical population.
 
+## Download trained targets
+
+Use the [Hugging Face download guide](docs/DOWNLOADS.md) to select published
+arithmetic roots or MNIST checkpoints. The helper pins release revisions,
+verifies manifest and payload hashes, and reuses the standard Hub cache.
+
 ## Arithmetic targets
 
 The SYN88 recipe is available as:
