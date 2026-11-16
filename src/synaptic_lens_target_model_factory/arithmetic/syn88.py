@@ -119,7 +119,7 @@ def main():
     parser.add_argument(
         "--count", type=int, default=1, help="2304 for the complete population"
     )
-    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--device", default="cuda")
     parser.add_argument(
         "--source-revision", help="Record the exact factory source revision used"
     )

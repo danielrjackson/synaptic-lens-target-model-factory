@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
+
 from synaptic_lens_target_model_factory.arithmetic.rules import RULE_IDS, labels
 from synaptic_lens_target_model_factory.arithmetic.targets import addition_suite
 from synaptic_lens_target_model_factory.vision.generators import (
@@ -137,3 +138,29 @@ def test_upstream_acquisition_refuses_bad_hash_and_existing_directory(
     assert list(destination.iterdir()) == []
     with pytest.raises(FileExistsError):
         mnist.download_train_gzip(destination)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA GPU required")
+def test_cuda_fixture_roundtrip_and_rng_preservation(tmp_path):
+    x, y = generate_balanced_dataset("shapes", examples_per_class=1, seed=3)
+    before = torch.cuda.get_rng_state()
+    model, lineage = train_fixture(x, y, device="cuda")
+    assert next(model.parameters()).is_cuda
+    assert lineage["device"] == "cuda"
+    assert torch.equal(before, torch.cuda.get_rng_state())
+    path = tmp_path / "cuda-target.pt"
+    digest = save_target(path, model, lineage)
+    restored, metadata = load_target(path, digest)
+    assert metadata == lineage
+    with torch.inference_mode():
+        expected = model(normalize_uint8_images(x).cuda()).cpu()
+        torch.testing.assert_close(
+            restored(normalize_uint8_images(x)), expected, rtol=1e-4, atol=1e-5
+        )
+
+
+def test_cuda_request_fails_explicitly_when_unavailable(monkeypatch):
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    x, y = generate_balanced_dataset("shapes", examples_per_class=1, seed=3)
+    with pytest.raises(RuntimeError, match="CUDA requested"):
+        train_fixture(x, y, device="cuda")

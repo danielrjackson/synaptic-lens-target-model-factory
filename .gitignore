@@ -11,3 +11,6 @@ dist/
 .venv-locked/
 .venv-installer/
 .venv-hub/
+
+.venv-locked-cpu/
+.venv-locked-cuda/

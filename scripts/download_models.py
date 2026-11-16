@@ -8,8 +8,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path, PurePosixPath
 import re
+from pathlib import Path, PurePosixPath
 from typing import Callable
 
 CATALOG = Path(__file__).resolve().parents[1] / "docs" / "releases.json"

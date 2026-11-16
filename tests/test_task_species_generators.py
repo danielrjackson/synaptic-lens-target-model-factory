@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from synaptic_lens_target_model_factory.vision.generators import (  # noqa: E402
     CLASS_CODEBOOKS,
     _arrow_raster_direction,

@@ -23,7 +23,7 @@ The historical target schedule is 100 epochs, batch size 256 (196 updates per
 epoch), with 196-step linear warmup from 1e-5 to 1e-3 then cosine decay to 1e-5.
 `vision.schedule.learning_rates` returns all 19,600 rates. Collection-specific
 orders, initialization, checkpoints and measured labels must be recorded rather
-than guessed. The public bounded `train_fixture` performs 1–10 CPU updates with
+than guessed. The public bounded `train_fixture` performs 1–10 updates on an explicit CPU or CUDA device with
 AdamW at 0.001/weight decay 0.01; it is not that full historical schedule.
 
 ## Six synthetic families

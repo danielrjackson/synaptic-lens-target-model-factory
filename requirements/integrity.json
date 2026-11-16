@@ -1,14 +1,17 @@
 {
   "schema": 1,
-  "profile": "windows-x64-cpython313-cpu",
-  "resolver": "uv 0.7.4",
+  "profile": "windows-x64-cpython315-cpu-and-cu134",
+  "resolver": "uv 0.13.8",
   "import_name": "synaptic_lens_target_model_factory",
   "tests": "tests",
   "sha256": {
-    "pyproject.toml": "dc70e3a849fc7656a365fa4132c4abb3051bb880a857b1ef1f66acc61fe25b45",
-    "requirements/windows-cpu.in": "bedee8113ade1937f333e97a709fabc145cf1bf3317aa9aa666ed96cc7255a23",
-    "requirements/windows-cpu.txt": "a615dc2bad8739667a5bc6a77ff27afe688d81886cb4818e065e83dc814b82b7",
-    "requirements/installer.in": "88335dc4932e685227a58045b90891ca2ba86b90fd787414b48b39baaf1080e6",
-    "requirements/installer.txt": "2dbf4890c940ead82c680e7058b38ad95303d36e3ded85252698e3e2a9d14d5c"
-  }
+    "pyproject.toml": "a3df5db3565858ffa19e35a4d841b9599e473a20a0251cd4171dda363e2a2bb5",
+    "requirements/windows-cpu.in": "5f9db322e2b650250c89cef438b964fbfcabbd8bc7947049c5ac3b841f3511aa",
+    "requirements/windows-cpu.txt": "f6c451489cac77c2a11acc0ed6a479d8980fdf408d2f73fbf9ba62214cdf3d78",
+    "requirements/installer.in": "121fd8a3dbe3f545a47d6e17c345e859c30538f3b4861b45e5edf85293669c2f",
+    "requirements/installer.txt": "e86bdce341257981f76ab038a109d815ed59ee721f420ad001de54108db0ea17",
+    "requirements/windows-cuda.in": "c14239a3993e0d7c6b70cdfeb396830ddebc44bf41d536490b80d3d05c2bcabe",
+    "requirements/windows-cuda.txt": "a4bbef5e72b67aa7b46a896bbf0e6703980803a3c2ff3ac36ad2d16b5eca4508"
+  },
+  "python": "3.15.2"
 }

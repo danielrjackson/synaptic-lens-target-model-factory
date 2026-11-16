@@ -1,4 +1,5 @@
 """Lock checks must reject stale or incomplete identities before installing."""
+
 import hashlib
 import importlib.util
 import json
@@ -12,7 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def checker(tmp_path):
-    spec = importlib.util.spec_from_file_location("lock_check", ROOT / "scripts/locked.py")
+    spec = importlib.util.spec_from_file_location(
+        "lock_check", ROOT / "scripts/locked.py"
+    )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     req = tmp_path / "requirements"
@@ -29,7 +32,9 @@ def checker(tmp_path):
 def rebind(module, name):
     path = module.REQ / "integrity.json"
     manifest = json.loads(path.read_text())
-    manifest["sha256"][name] = hashlib.sha256((module.ROOT / name).read_bytes()).hexdigest()
+    manifest["sha256"][name] = hashlib.sha256(
+        (module.ROOT / name).read_bytes()
+    ).hexdigest()
     path.write_text(json.dumps(manifest))
 
 
@@ -72,3 +77,20 @@ def test_locked_run_uses_installed_package():
     if name:
         package = __import__(name)
         assert Path(package.__file__).is_relative_to(Path(sys.prefix))
+
+
+def test_cuda_lock_profile_valid(tmp_path):
+    checker(tmp_path).check("cuda")
+
+
+def test_cpu_hides_gpu_cuda_preserves_visibility(monkeypatch, tmp_path):
+    module = checker(tmp_path)
+    calls = []
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0")
+    monkeypatch.setattr(
+        module.subprocess, "run", lambda *args, **kwargs: calls.append(kwargs)
+    )
+    module.run("unused", profile="cpu")
+    module.run("unused", profile="cuda")
+    assert calls[0]["env"]["CUDA_VISIBLE_DEVICES"] == "-1"
+    assert calls[1]["env"]["CUDA_VISIBLE_DEVICES"] == "0"

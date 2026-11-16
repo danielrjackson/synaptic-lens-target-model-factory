@@ -2,6 +2,7 @@ import hashlib
 
 import pytest
 import torch
+
 from synaptic_lens_target_model_factory.vision.compatibility import compare_initializer
 from synaptic_lens_target_model_factory.vision.model import build_d32_l2
 

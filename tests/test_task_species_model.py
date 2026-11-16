@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pytest
 import torch
+
 from synaptic_lens_target_model_factory.vision.coordinates import (
     build_coordinate_schema,
     validate_coordinate_schema,

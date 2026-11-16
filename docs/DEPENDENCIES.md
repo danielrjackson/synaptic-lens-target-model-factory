@@ -1,64 +1,68 @@
-# Locked Windows CPU environment
+# Current Windows CUDA and CPU environments
 
-The maintained reproducibility profile is Windows x64, CPython 3.13 (validated
-locally with 3.13.3), CPU PyTorch 2.15.0 and NumPy 2.5.4. It is separate from
-historical scientific environments and does not establish byte-exact historical
-initialization or reproduction of published training scores. Other Python,
-accelerator and operating-system profiles are not covered by these locks.
+Verified package-index versions on 2026-11-16: Python 3.15.2, uv 0.13.8,
+PyTorch 2.15.0, CUDA wheel runtime 13.4, NumPy 2.5.5, Pillow 13.0.0,
+pytest 9.2.0 and setuptools 84.2.1. Every runtime/test/build transitive dependency
+is pinned in `requirements/windows-{cuda,cpu}.in` and archive-hashed in its `.txt`.
+SymPy 1.14.0 requires mpmath <1.4, so mpmath 1.3.0 is the newest compatible
+release despite the newer 1.4.1 release. Historical scientific evidence stays
+unchanged; these profiles establish current execution and seeded repeatability.
 
-`requirements/windows-cpu.in` intentionally pins every direct and transitive
-runtime, test and build dependency. `windows-cpu.txt` contains archive SHA-256
-hashes from package-index metadata. `installer.txt` similarly pins uv 0.7.4.
-`integrity.json` binds the input/output bytes and LF-normalized pyproject metadata.
-Hashes establish artifact identity, not a package's safety or authorship.
+## Install and verify
 
-From a fresh checkout in PowerShell, with Windows x64 Python 3.13 installed:
+Install official Windows x64 Python 3.15.2 first. In PowerShell:
 
 ```powershell
 if (Test-Path .venv-installer) { throw "Choose a new installer environment path" }
-py -3.13 -m venv .venv-installer
+py -3.15 -m venv .venv-installer
 .\.venv-installer\Scripts\python.exe -m pip install --require-hashes --only-binary=:all: -r requirements/installer.txt
 .\.venv-installer\Scripts\python.exe scripts/locked.py install
 .\.venv-installer\Scripts\python.exe scripts/locked.py test
 ```
 
-The bootstrap uses its own fresh environment rather than installing uv into a
-shared Python. The script prefers uv beside that bootstrap interpreter.
-The installer refuses an existing environment directory; choose a new one with
-`--environment PATH` to preserve other environments. It uses hash-required,
-wheel-only exact synchronization, builds this checkout's wheel with the locked
-setuptools 84.2.1 backend, and installs that local wheel without resolving more
-dependencies or downloading an isolated backend. The local project wheel is bound
-to the reviewed Git source rather than included among third-party archive hashes.
-Tests verify installed package location and dependency versions before the bounded
-CPU suite. No source or dataset download, model upload or GPU execution occurs.
-Only package wheels are downloaded. The Python distribution and initial pip are
-bootstrap trust inputs; this repository does not claim to hash-lock the OS or Python.
+CUDA is the default profile. It installs PyTorch's official `cu134` Windows
+wheel and requires a compatible NVIDIA driver/GPU. The wheel supplies its CUDA
+runtime; installing a separate CUDA toolkit is unnecessary for these Python
+recipes. `test` requires real CUDA availability and executes a small GPU tensor
+operation before the installed-package suite. Training CLIs default to CUDA.
 
-The `Locked Windows CPU validation` GitHub workflow is manual-only, one Windows
-job, with actions pinned by commit. It runs this same installation and test path.
-No hosted run is required or launched for routine edits. Core Lens installation
-does not require the companion factory. Tests requiring that optional companion
-run in the separately reviewed combined checkout, after the factory is available;
-a core-only CI pass must not be reported as combined validation.
+For CPU, add `--profile cpu` to both locked commands and `--device cpu` to training
+examples. CPU execution explicitly hides GPUs. The manual-only Windows CI uses
+this CPU profile because the hosted runner has no NVIDIA GPU. CPU and CUDA use
+separate fresh directories; an existing environment is never overwritten. Use
+`--environment PATH` for another fresh destination.
 
-## Reviewed updates
+The bootstrap remains isolated from shared Python installations. The installer
+uses hash-required, wheel-only synchronization, builds this checkout with the
+locked setuptools backend, and installs its local wheel without dependency
+resolution. Tests validate installed versions and package location. The Python
+distribution and initial pip remain explicit bootstrap trust inputs.
 
-Do not regenerate against unconstrained newest dependencies. Edit the intentional
-pins, assess the affected packages and then regenerate with uv 0.7.4:
+## Refreshing locks
+
+Use uv 0.13.8 and deliberately reviewed pins:
 
 ```powershell
-uv pip compile requirements/windows-cpu.in --python-version 3.13 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/windows-cpu.txt
-uv pip compile requirements/installer.in --python-version 3.13 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/installer.txt
+uv pip compile requirements/windows-cpu.in --python-version 3.15 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/windows-cpu.txt
+uv pip compile requirements/windows-cuda.in --python-version 3.15 --python-platform windows --generate-hashes --no-build --no-header --no-annotate --index https://download.pytorch.org/whl/cu134 --index-strategy unsafe-best-match -o requirements/windows-cuda.txt
+uv pip compile requirements/installer.in --python-version 3.15 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/installer.txt
 ```
 
-Refresh `integrity.json` hashes for changed inputs, outputs and normalized
-pyproject, review the exact lock diff, then repeat a fresh locked installation,
-the relevant CPU suites and an independent exact-diff review. Unchanged inputs
-must regenerate identical output. Requirement/manifest files use LF for stable
-regeneration; maintained Windows source and documentation use CRLF. Frozen
-scientific evidence and original license/source bytes retain their existing policy.
+The CUDA resolution deliberately considers both official PyPI and PyTorch indexes:
+PyTorch's index also mirrors older common dependencies. The explicit `+cu134`
+torch version and resulting SHA-256 hashes bind the CUDA build; all installations
+require those hashes. Review new archive identities before accepting a lock.
+Refresh `integrity.json` hashes for input/output bytes and LF-normalized pyproject.
+Requirement/manifest files use LF; maintained Windows source/docs use CRLF.
+Run clean installs for both profiles, bounded GPU verification, all tests, and
+an independent exact-diff review. Shared environments and historical artifacts
+are preserved.
 
-The conventional `pip install -e ".[test]"` route follows permissive package
-compatibility bounds and is not a locked reproduction path. Do not use its success
-as evidence that the frozen profile installs correctly.
+## Official release sources
+
+- https://www.python.org/downloads/
+- https://pypi.org/project/uv/
+- https://pytorch.org/get-started/locally/
+- https://download.pytorch.org/whl/cu134/torch/
+- https://pypi.org/project/numpy/
+- https://pypi.org/project/sympy/
