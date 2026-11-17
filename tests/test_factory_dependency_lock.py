@@ -72,3 +72,12 @@ def test_locked_run_uses_installed_package():
     if name:
         package = __import__(name)
         assert Path(package.__file__).is_relative_to(Path(sys.prefix))
+
+
+def test_installer_uses_reviewed_patched_uv():
+    version = "0.13.8"
+    assert (ROOT / "requirements/installer.in").read_text().strip() == f"uv=={version}"
+    assert (ROOT / "requirements/installer.txt").read_text().startswith(f"uv=={version} ")
+    assert f'uv_version != "{version}"' in (ROOT / "scripts/locked.py").read_text()
+    manifest = json.loads((ROOT / "requirements/integrity.json").read_text())
+    assert manifest["resolver"] == f"uv {version}"

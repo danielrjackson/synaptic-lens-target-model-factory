@@ -8,7 +8,7 @@ accelerator and operating-system profiles are not covered by these locks.
 
 `requirements/windows-cpu.in` intentionally pins every direct and transitive
 runtime, test and build dependency. `windows-cpu.txt` contains archive SHA-256
-hashes from package-index metadata. `installer.txt` similarly pins uv 0.7.4.
+hashes from package-index metadata. `installer.txt` similarly pins uv 0.13.8.
 `integrity.json` binds the input/output bytes and LF-normalized pyproject metadata.
 Hashes establish artifact identity, not a package's safety or authorship.
 
@@ -45,7 +45,7 @@ a core-only CI pass must not be reported as combined validation.
 ## Reviewed updates
 
 Do not regenerate against unconstrained newest dependencies. Edit the intentional
-pins, assess the affected packages and then regenerate with uv 0.7.4:
+pins, assess the affected packages and then regenerate with uv 0.13.8:
 
 ```powershell
 uv pip compile requirements/windows-cpu.in --python-version 3.13 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/windows-cpu.txt
