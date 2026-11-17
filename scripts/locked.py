@@ -61,8 +61,8 @@ def main():
         if env.exists():
             raise FileExistsError("Use a new environment path; existing environments are preserved")
         uv_version = subprocess.check_output([UV, "--version"], text=True).split()[1]
-        if uv_version != "0.7.4":
-            raise RuntimeError("Install the hash-locked uv 0.7.4 bootstrap first")
+        if uv_version != "0.13.8":
+            raise RuntimeError("Install the hash-locked uv 0.13.8 bootstrap first")
         run(UV, "venv", "--python", sys.executable, env)
         run(UV, "pip", "sync", "--python", python, "--require-hashes", "--only-binary", ":all:", REQ / "windows-cpu.txt")
         # The locked backend builds local Git source; no unpinned PEP 517 isolation download.
