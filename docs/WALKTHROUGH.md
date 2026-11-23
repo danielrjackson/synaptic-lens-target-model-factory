@@ -6,11 +6,10 @@ optimizer steps: 100 for addition and 100 for the alternate arithmetic rule.
 
 ## 1. Prepare the environment
 
-Install the [locked Windows CUDA profile](DEPENDENCIES.md#optional-cuda-profile)
-from this checkout. For CPU, use the default locked profile instead and
-replace `.venv-locked-cuda` with `.venv-locked` in the commands below. Keep
-the reference download in a small separate environment, as in the
-[download guide](DOWNLOADS.md):
+Install the [default locked Windows CPU profile](DEPENDENCIES.md) from this
+checkout. For CUDA, install the [optional CUDA profile](DEPENDENCIES.md#optional-cuda-profile)
+and use the CUDA command shown below. Keep the reference download in a small
+separate environment, as in the [download guide](DOWNLOADS.md):
 
 ```powershell
 py -3.13 -m venv .venv-hub
@@ -27,11 +26,17 @@ are validated only on Windows.
 ## 2. Train and compare
 
 ```powershell
-.\.venv-locked-cuda\Scripts\python.exe examples/compare_adder.py --reference $reference.path --sha256 $reference.sha256 --output runs/adder-01 --device cuda
+.\.venv-locked\Scripts\python.exe examples/compare_adder.py --reference $reference.path --sha256 $reference.sha256 --output runs/adder-01
 ```
 
-For a CPU-only machine, pass `--device cpu`. Choose a new output directory each
-time. The command preserves the download and all existing runs.
+CUDA is opt-in:
+
+```powershell
+.\.venv-locked-cuda\Scripts\python.exe examples/compare_adder.py --reference $reference.path --sha256 $reference.sha256 --output runs/adder-cuda-01 --device cuda
+```
+
+Choose a new output directory each time. The command preserves the download and
+all existing runs.
 
 You will see a table with released and newly trained addition accuracy at updates
 0, 1, 2, 5, 10, 25, 50 and 100. Both models are evaluated on all 100 ordered digit
@@ -53,9 +58,10 @@ with the companion [Synaptic Lens examples](https://github.com/danielrjackson/sy
 ## 3. Try custom image tasks
 
 ```powershell
-.\.venv-locked-cuda\Scripts\python.exe examples/train_vision.py --family shapes --device cuda
+.\.venv-locked\Scripts\python.exe examples/train_vision.py --family shapes
 ```
 
+To opt into CUDA, use the CUDA environment and pass `--device cuda`.
 Choose `sprites`, `shapes`, `textures`, `count`, `location`, or `arrows`. This quick
 installation check makes ten examples, runs one update of a 19,658-parameter
 image transformer, and verifies a saved checkpoint before removing its temporary

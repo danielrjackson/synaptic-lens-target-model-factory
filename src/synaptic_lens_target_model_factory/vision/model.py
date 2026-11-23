@@ -127,9 +127,12 @@ class MNISTPatchTransformer(nn.Module):
         return self.classifier(self.final_norm(tokens[:, 0]))
 
 
-def build_d32_l2(seed: int) -> MNISTPatchTransformer:
+def build_d32_l2(seed: int, *, cpu_only: bool = False) -> MNISTPatchTransformer:
     """Construct an independent root with an explicit nonnegative init seed."""
     if type(seed) is not int or seed < 0:
         raise ValueError("seed must be a nonnegative integer")
-    torch.manual_seed(seed)
+    if cpu_only:
+        torch.default_generator.manual_seed(seed)
+    else:
+        torch.manual_seed(seed)
     return MNISTPatchTransformer()

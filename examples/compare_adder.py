@@ -59,7 +59,9 @@ def main():
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
+    parser.add_argument(
+        "--device", choices=["cpu", "cuda"], default="cpu", help="default: cpu"
+    )
     args = parser.parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         parser.error(

@@ -47,17 +47,17 @@ def train_fixture(images, labels, *, seed=7, updates=1, device="cpu"):
     ):
         raise ValueError("Expected one native class index per image")
     selected = torch.device(device)
-    if selected.type == "cuda" and not torch.cuda.is_available():
+    use_cuda = selected.type == "cuda"
+    if use_cuda and not torch.cuda.is_available():
         raise RuntimeError(
             "CUDA requested but unavailable; select device=cpu explicitly"
         )
     x, y = x.to(selected), y.to(selected)
-    # build_d32_l2 calls torch.manual_seed, which seeds every visible GPU.
-    devices = (
-        list(range(torch.cuda.device_count())) if torch.cuda.is_available() else []
-    )
+    # CUDA seeding affects every visible GPU; preserve all of those RNG streams.
+    # CPU mode seeds only the CPU generator and does not enumerate CUDA devices.
+    devices = list(range(torch.cuda.device_count())) if use_cuda else []
     with torch.random.fork_rng(devices=devices):
-        model = build_d32_l2(seed).to(selected)
+        model = build_d32_l2(seed, cpu_only=not use_cuda).to(selected)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
         initial = state_dict_sha256(model.state_dict())
         for _ in range(updates):
