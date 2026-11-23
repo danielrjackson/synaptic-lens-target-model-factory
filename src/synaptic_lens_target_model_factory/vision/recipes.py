@@ -30,8 +30,8 @@ def contrarian_labels(labels, mapping):
     return mapping[labels].astype(np.uint8)
 
 
-def train_fixture(images, labels, *, seed=7, updates=1):
-    """One-root CPU smoke recipe, not the historical full collection schedule."""
+def train_fixture(images, labels, *, seed=7, updates=1, device="cpu"):
+    """Bounded one-root smoke recipe with explicit device selection."""
     if type(updates) is not int or not 1 <= updates <= 10:
         raise ValueError("Fixture recipe permits 1 through 10 updates")
     if not 1 <= len(images) <= 256:
@@ -46,8 +46,18 @@ def train_fixture(images, labels, *, seed=7, updates=1):
         or y.max() > 9
     ):
         raise ValueError("Expected one native class index per image")
-    with torch.random.fork_rng(devices=[]):
-        model = build_d32_l2(seed)
+    selected = torch.device(device)
+    if selected.type == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError(
+            "CUDA requested but unavailable; select device=cpu explicitly"
+        )
+    x, y = x.to(selected), y.to(selected)
+    # build_d32_l2 calls torch.manual_seed, which seeds every visible GPU.
+    devices = (
+        list(range(torch.cuda.device_count())) if torch.cuda.is_available() else []
+    )
+    with torch.random.fork_rng(devices=devices):
+        model = build_d32_l2(seed).to(selected)
         optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
         initial = state_dict_sha256(model.state_dict())
         for _ in range(updates):
@@ -56,6 +66,7 @@ def train_fixture(images, labels, *, seed=7, updates=1):
             loss.backward()
             optimizer.step()
     return model.eval(), {
+        "device": str(selected),
         "seed": seed,
         "updates": updates,
         "initial_state_sha256": initial,

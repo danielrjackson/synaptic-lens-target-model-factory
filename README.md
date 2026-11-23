@@ -9,12 +9,15 @@ readers that study those trained networks.
 
 The custom-image release includes ten trained targets and a CUDA-default
 `predict.py` example. Start there to inspect a trained classifier; use this
-repository to build and train targets of your own.
+repository to build and train targets of your own. The [target training
+walkthrough](docs/WALKTHROUGH.md) compares a new Adder target with a released
+root; the companion Lens walkthrough trains the reader, not the target.
 
 ## Reproducible Windows installation
 
-Use the [hash-locked CPU installation](docs/DEPENDENCIES.md) for reproducible
-runtime, tests and wheel builds. The exploratory installation below resolves dependencies at install time.
+Use the [hash-locked Windows environments](docs/DEPENDENCIES.md) for reproducible
+runtime, tests and wheel builds. CPU remains the default; the CUDA profile is
+opt-in. The exploratory installation below resolves dependencies at install time.
 
 ## Install and try a bounded CPU example
 
@@ -38,7 +41,8 @@ py -3.13 -m venv .venv
 ```
 
 See the [official PyTorch installation guide](https://pytorch.org/get-started/locally/)
-for CPU-specific wheels. Examples use CPU only and fresh temporary directories.
+for CPU-specific wheels. The image example uses CPU by default and can run with
+`--device cuda`. It writes to a fresh temporary directory.
 They do not download MNIST or train a historical population.
 
 ## Download trained targets

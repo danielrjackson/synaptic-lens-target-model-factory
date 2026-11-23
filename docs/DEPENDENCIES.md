@@ -1,10 +1,10 @@
-# Locked Windows CPU environment
+# Locked Windows environments
 
 The maintained reproducibility profile is Windows x64, CPython 3.13 (validated
 locally with 3.13.3), CPU PyTorch 2.15.0 and NumPy 2.5.4. It is separate from
 historical scientific environments and does not establish byte-exact historical
 initialization or reproduction of published training scores. Other Python,
-accelerator and operating-system profiles are not covered by these locks.
+accelerator and operating-system profiles are not covered by the CPU lock.
 
 `requirements/windows-cpu.in` intentionally pins every direct and transitive
 runtime, test and build dependency. `windows-cpu.txt` contains archive SHA-256
@@ -42,6 +42,27 @@ does not require the companion factory. Tests requiring that optional companion
 run in the separately reviewed combined checkout, after the factory is available;
 a core-only CI pass must not be reported as combined validation.
 
+## Optional CUDA profile
+
+Use Windows x64 CPython 3.15 (validated with 3.15.2) and an NVIDIA
+driver compatible with the PyTorch 2.15.0 CUDA 13.4 wheel. The wheel includes
+the CUDA runtime; a separate CUDA toolkit is not needed. Create a distinct
+bootstrap environment so the existing CPU environment is not modified:
+
+```powershell
+if (Test-Path .venv-installer-cuda) { throw "Choose a new installer environment path" }
+py -3.15 -m venv .venv-installer-cuda
+.\.venv-installer-cuda\Scripts\python.exe -m pip install --require-hashes --only-binary=:all: -r requirements/installer.txt
+.\.venv-installer-cuda\Scripts\python.exe scripts/locked.py install --profile cuda
+.\.venv-installer-cuda\Scripts\python.exe scripts/locked.py test --profile cuda
+```
+
+If Python 3.15 is installed via uv rather than the Windows launcher, use its
+full interpreter path instead of `py -3.15`. The CUDA environment is
+`.venv-locked-cuda`; it has a separate hash-verified lock. Its validation
+checks the installed versions, CUDA runtime and a small GPU operation before
+running the tests. GitHub's existing manual workflow stays on Windows CPU.
+
 ## Reviewed updates
 
 Do not regenerate against unconstrained newest dependencies. Edit the intentional
@@ -49,12 +70,13 @@ pins, assess the affected packages and then regenerate with uv 0.13.8:
 
 ```powershell
 uv pip compile requirements/windows-cpu.in --python-version 3.13 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/windows-cpu.txt
+uv pip compile requirements/windows-cuda.in --python-version 3.15 --python-platform windows --generate-hashes --no-build --no-header --no-annotate --index https://download.pytorch.org/whl/cu134 --index-strategy unsafe-best-match -o requirements/windows-cuda.txt
 uv pip compile requirements/installer.in --python-version 3.13 --python-platform windows --generate-hashes --no-build --no-header --no-annotate -o requirements/installer.txt
 ```
 
 Refresh `integrity.json` hashes for changed inputs, outputs and normalized
 pyproject, review the exact lock diff, then repeat a fresh locked installation,
-the relevant CPU suites and an independent exact-diff review. Unchanged inputs
+the relevant CPU/CUDA suites and an independent exact-diff review. Unchanged inputs
 must regenerate identical output. Requirement/manifest files use LF for stable
 regeneration; maintained Windows source and documentation use CRLF. Frozen
 scientific evidence and original license/source bytes retain their existing policy.
