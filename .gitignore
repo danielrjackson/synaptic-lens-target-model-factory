@@ -9,5 +9,8 @@ dist/
 .env.*
 
 .venv-locked/
+.venv-locked-cuda/
 .venv-installer/
+.venv-installer-cuda/
 .venv-hub/
+/runs/

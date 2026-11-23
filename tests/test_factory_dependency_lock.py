@@ -67,6 +67,23 @@ def test_lock_missing_transitive_pin_is_rejected(tmp_path):
         module.check()
 
 
+def test_cuda_lock_profile_valid(tmp_path):
+    checker(tmp_path).check("cuda")
+
+
+def test_cpu_validation_hides_gpu_cuda_preserves_visibility(monkeypatch):
+    spec = importlib.util.spec_from_file_location("lock_check", ROOT / "scripts/locked.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    calls = []
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0")
+    monkeypatch.setattr(module.subprocess, "run", lambda *args, **kwargs: calls.append(kwargs))
+    module.run("unused", profile="cpu")
+    module.run("unused", profile="cuda")
+    assert calls[0]["env"]["CUDA_VISIBLE_DEVICES"] == "-1"
+    assert calls[1]["env"]["CUDA_VISIBLE_DEVICES"] == "0"
+
+
 def test_locked_run_uses_installed_package():
     name = os.environ.get("SL_LOCKED_PACKAGE")
     if name:

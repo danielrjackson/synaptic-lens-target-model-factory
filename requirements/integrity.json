@@ -9,6 +9,9 @@
     "requirements/windows-cpu.in": "bedee8113ade1937f333e97a709fabc145cf1bf3317aa9aa666ed96cc7255a23",
     "requirements/windows-cpu.txt": "a615dc2bad8739667a5bc6a77ff27afe688d81886cb4818e065e83dc814b82b7",
     "requirements/installer.in": "121fd8a3dbe3f545a47d6e17c345e859c30538f3b4861b45e5edf85293669c2f",
-    "requirements/installer.txt": "e86bdce341257981f76ab038a109d815ed59ee721f420ad001de54108db0ea17"
-  }
+    "requirements/installer.txt": "e86bdce341257981f76ab038a109d815ed59ee721f420ad001de54108db0ea17",
+    "requirements/windows-cuda.in": "c14239a3993e0d7c6b70cdfeb396830ddebc44bf41d536490b80d3d05c2bcabe",
+    "requirements/windows-cuda.txt": "a4bbef5e72b67aa7b46a896bbf0e6703980803a3c2ff3ac36ad2d16b5eca4508"
+  },
+  "cuda_profile": "windows-x64-cpython315-cu134"
 }
