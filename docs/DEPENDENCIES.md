@@ -1,7 +1,6 @@
 # Locked Windows environments
 
-The maintained reproducibility profile is Windows x64, CPython 3.13 (validated
-locally with 3.13.3), CPU PyTorch 2.15.0 and NumPy 2.5.4. It is separate from
+The maintained reproducibility profile is Windows x64, CPython 3.13, CPU PyTorch 2.15.0 and NumPy 2.5.5. It is separate from
 historical scientific environments and does not establish byte-exact historical
 initialization or reproduction of published training scores. Other Python,
 accelerator and operating-system profiles are not covered by the CPU lock.
