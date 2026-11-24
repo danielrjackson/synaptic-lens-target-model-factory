@@ -61,7 +61,10 @@ def test_lock_requires_hash_even_if_manifest_is_refreshed(tmp_path):
 def test_lock_missing_transitive_pin_is_rejected(tmp_path):
     module = checker(tmp_path)
     p = module.REQ / "windows-cpu.in"
-    p.write_text(p.read_text().replace("filelock==4.2.10\n", ""))
+    lines = p.read_text().splitlines(keepends=True)
+    kept = [line for line in lines if not line.startswith("filelock==")]
+    assert len(kept) == len(lines) - 1
+    p.write_text("".join(kept))
     rebind(module, "requirements/windows-cpu.in")
     with pytest.raises(ValueError, match="pins and resolved lock differ"):
         module.check()

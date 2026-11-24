@@ -6,12 +6,12 @@
   "tests": "tests",
   "sha256": {
     "pyproject.toml": "dc70e3a849fc7656a365fa4132c4abb3051bb880a857b1ef1f66acc61fe25b45",
-    "requirements/windows-cpu.in": "e6bb8e37917f9048fde3bda90d4b951088831841810ff8db1cdbf8cee7b2c6b3",
-    "requirements/windows-cpu.txt": "f6c451489cac77c2a11acc0ed6a479d8980fdf408d2f73fbf9ba62214cdf3d78",
+    "requirements/windows-cpu.in": "2358039b78319c32635ee3441ac43eab271a22a424e8f4aca8ea6ebccd7aae0d",
+    "requirements/windows-cpu.txt": "6ff0db8275c6e1dbd035da63f865379555d00b687c295278db725a309f705461",
     "requirements/installer.in": "121fd8a3dbe3f545a47d6e17c345e859c30538f3b4861b45e5edf85293669c2f",
     "requirements/installer.txt": "e86bdce341257981f76ab038a109d815ed59ee721f420ad001de54108db0ea17",
-    "requirements/windows-cuda.in": "c14239a3993e0d7c6b70cdfeb396830ddebc44bf41d536490b80d3d05c2bcabe",
-    "requirements/windows-cuda.txt": "a4bbef5e72b67aa7b46a896bbf0e6703980803a3c2ff3ac36ad2d16b5eca4508"
+    "requirements/windows-cuda.in": "ed58971ddd014be83bd131e7cb19a92368b6ffcf6bb128bbba4184f418df5bc2",
+    "requirements/windows-cuda.txt": "9be7bad672f3e6f6d4022cbe167d98bd6b55c80c5a4baf9d2dea53568005b622"
   },
   "cuda_profile": "windows-x64-cpython315-cu134"
 }
