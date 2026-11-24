@@ -6,8 +6,8 @@
   "tests": "tests",
   "sha256": {
     "pyproject.toml": "dc70e3a849fc7656a365fa4132c4abb3051bb880a857b1ef1f66acc61fe25b45",
-    "requirements/windows-cpu.in": "bedee8113ade1937f333e97a709fabc145cf1bf3317aa9aa666ed96cc7255a23",
-    "requirements/windows-cpu.txt": "a615dc2bad8739667a5bc6a77ff27afe688d81886cb4818e065e83dc814b82b7",
+    "requirements/windows-cpu.in": "e6bb8e37917f9048fde3bda90d4b951088831841810ff8db1cdbf8cee7b2c6b3",
+    "requirements/windows-cpu.txt": "f6c451489cac77c2a11acc0ed6a479d8980fdf408d2f73fbf9ba62214cdf3d78",
     "requirements/installer.in": "121fd8a3dbe3f545a47d6e17c345e859c30538f3b4861b45e5edf85293669c2f",
     "requirements/installer.txt": "e86bdce341257981f76ab038a109d815ed59ee721f420ad001de54108db0ea17",
     "requirements/windows-cuda.in": "c14239a3993e0d7c6b70cdfeb396830ddebc44bf41d536490b80d3d05c2bcabe",
